@@ -1,8 +1,13 @@
-import { useState } from "react";
-import OtpInput from "react-otp-input";
+import { useEffect } from "react";
 
 const App = () => {
-  const [otp, setOtp] = useState("");
+  useEffect(() => {
+    const input = document.querySelector("[autocomplete=one-time-code")!;
+    input.addEventListener("input", () =>
+      // @ts-ignore
+      input.style.setProperty("--_otp-digit", input.selectionStart)
+    );
+  }, []);
 
   return (
     <div
@@ -16,22 +21,16 @@ const App = () => {
         alignItems: "center",
       }}
     >
-      <OtpInput
-        value={otp}
-        onChange={setOtp}
-        numInputs={4}
-        renderSeparator={<span>-</span>}
-        renderInput={(props) => <input {...props} />}
-        inputType="number"
-      />
-      <input
-        type="text"
-        autoComplete="one-time-code"
-        inputMode="numeric"
-        placeholder="Код из sms"
-        pattern="[0-9]*"
-        maxLength={4}
-      />
+      <label>
+        <span>One Time Code</span>
+        <input
+          type="text"
+          autoComplete="one-time-code"
+          inputMode="numeric"
+          maxLength={6}
+          pattern="\d{6}"
+        />
+      </label>
     </div>
   );
 };
