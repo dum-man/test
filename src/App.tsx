@@ -1,16 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CodeInput from "./CodeInput/CodeInput";
 
 const App = () => {
   const [digits, setDigits] = useState(["", "", "", "", "", ""]);
-
-  useEffect(() => {
-    const input = document.querySelector("[autocomplete=one-time-code")!;
-    input.addEventListener("input", () =>
-      // @ts-ignore
-      input.style.setProperty("--_otp-digit", input.selectionStart)
-    );
-  }, []);
 
   return (
     <div

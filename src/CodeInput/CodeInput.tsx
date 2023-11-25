@@ -1,11 +1,4 @@
-import {
-  useImperativeHandle,
-  useRef,
-  forwardRef,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-} from "react";
+import { useImperativeHandle, useRef, forwardRef, Dispatch, SetStateAction } from "react";
 import styles from "./CodeInput.module.css";
 
 interface CodeInputProps {
@@ -30,23 +23,28 @@ const CodeInput = forwardRef<CodeInputHandle, CodeInputProps>(function Input(
   }));
 
   const handleChange = (index: number, newValue: string) => {
-    const oldDigit = digits[index];
-    const newDigit = newValue.trim().replace(oldDigit, "");
-    if (newDigit < "0" || newDigit > "9") {
-      return;
-    }
-
-    setDigits((prev) => {
-      const copy = [...prev];
-      copy[index] = newValue;
-      return copy;
-    });
-
-    const inputs = inputRefs.current;
-    if (index < inputs.length - 1) {
-      inputs[index + 1].focus();
+    if (newValue.length > 1) {
+      setDigits(newValue.split(""));
+      inputRefs.current[0].blur();
     } else {
-      inputs[index].blur();
+      const oldDigit = digits[index];
+      const newDigit = newValue.trim().replace(oldDigit, "");
+      if (newDigit < "0" || newDigit > "9") {
+        return;
+      }
+
+      setDigits((prev) => {
+        const copy = [...prev];
+        copy[index] = newValue;
+        return copy;
+      });
+
+      const inputs = inputRefs.current;
+      if (index < inputs.length - 1) {
+        inputs[index + 1].focus();
+      } else {
+        inputs[index].blur();
+      }
     }
   };
 
@@ -64,6 +62,26 @@ const CodeInput = forwardRef<CodeInputHandle, CodeInputProps>(function Input(
       inputRefs.current[index - 1].focus();
     }
   };
+
+  // useEffect(() => {
+  //   const cb = (evt: any) => {
+  //     console.log(evt);
+  //   };
+  //   window.addEventListener("paste", (evt) => evt.target);
+  //   return () => window.removeEventListener("paste", cb);
+  // }, []);
+
+  // useEffect(() => {
+  //   const fn = (event: any) => {
+  //     console.log("here", event.target.value);
+  //   };
+  //   window.addEventListener("paste", fn);
+  //   return () => window.removeEventListener("paste", fn);
+  // }, []);
+
+  // const handlePaste = (evt: React.ClipboardEventHandler<HTMLInputElement>) => {
+  //   return;
+  // };
 
   return (
     <div className={styles["wrapper"]}>
