@@ -1,8 +1,19 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import CodeInput from "./CodeInput/CodeInput";
+import Webcam from "react-webcam";
 
 const App = () => {
   const [digits, setDigits] = useState(["", "", "", "", "", ""]);
+
+  const [mode, setMode] = useState<"environment" | "user">("user");
+
+  const webcamRef = useRef<null | Webcam>(null);
+
+  const videoConstraints = {
+    width: 400,
+    height: 300,
+    facingMode: mode,
+  };
 
   return (
     <div
@@ -27,6 +38,18 @@ const App = () => {
         />
       </label>
       <CodeInput digits={digits} setDigits={setDigits} />
+      <Webcam
+        ref={webcamRef}
+        width={400}
+        height={300}
+        mirrored
+        videoConstraints={videoConstraints}
+      />
+      <button
+        onClick={() => setMode((prev) => (prev === "user" ? "environment" : "user"))}
+      >
+        toggle {mode}
+      </button>
     </div>
   );
 };
