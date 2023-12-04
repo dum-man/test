@@ -15,11 +15,18 @@ const App = () => {
     facingMode: mode,
   };
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   navigator.mediaDevices
+  //     .enumerateDevices()
+  //     .then((res) => alert(JSON.stringify(res, null, 4)));
+  // }, []);
+
+  const handleToggle = () => {
     navigator.mediaDevices
-      .enumerateDevices()
-      .then((res) => alert(JSON.stringify(res, null, 4)));
-  }, []);
+      .getUserMedia({ video: true })
+      .then((data) => data.getTracks().forEach((track) => track.stop()));
+    setMode((prev) => (prev === "user" ? "environment" : "user"));
+  };
 
   return (
     <div
@@ -51,11 +58,7 @@ const App = () => {
         mirrored
         videoConstraints={videoConstraints}
       />
-      <button
-        onClick={() => setMode((prev) => (prev === "user" ? "environment" : "user"))}
-      >
-        toggle {mode}
-      </button>
+      <button onClick={handleToggle}>toggle {mode}</button>
     </div>
   );
 };
