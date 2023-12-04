@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CodeInput from "./CodeInput/CodeInput";
 import Webcam from "react-webcam";
 
@@ -14,6 +14,12 @@ const App = () => {
     height: 300,
     facingMode: mode,
   };
+
+  useEffect(() => {
+    navigator.mediaDevices
+      .enumerateDevices()
+      .then((res) => alert(JSON.stringify(res, null, 4)));
+  }, []);
 
   return (
     <div
